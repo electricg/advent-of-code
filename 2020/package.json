@@ -2,6 +2,7 @@
   "name": "advent-of-code-2020",
   "version": "1.0.0",
   "description": "Advent of Code 2020",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/electricg/advent-of-code#readme",
   "devDependencies": {
     "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^2.2.1",
     "prettier-eslint": "^12.0.0"

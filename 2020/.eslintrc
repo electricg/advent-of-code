@@ -26,6 +26,7 @@
         "no-unused-vars": "warn",
         "object-curly-spacing": ["error", "always"],
         "prefer-template": "warn",
+        "quotes": [2, "single", { "avoidEscape": true }],
         "semi": ["error", "always"],
         "space-before-blocks": ["error", "always"],
         "space-before-function-paren": [
@@ -35,22 +36,13 @@
                 "named": "never",
                 "asyncArrow": "always"
             }
-        ],
-        "prettier/prettier": [
-            "error",
-            {
-                "printWidth": 80,
-                "singleQuote": true,
-                "trailingComma": "none",
-                "bracketSpacing": true,
-                "jsxBracketSameLine": false,
-                "tabWidth": 4
-            }
         ]
+        // "prettier/prettier": ["error"]
     },
     "parserOptions": {
         "ecmaVersion": 8,
         "sourceType": "module"
-    },
-    "plugins": ["prettier"]
+    }
+    // "extends": ["prettier"],
+    // "plugins": ["prettier"]
 }
