@@ -8,8 +8,4 @@ const readFileLinesNumbers = (fileName, url) => {
     return lines.map(line => parseInt(line, 10));
 };
 
-const test = () => {
-    console.log('test');
-};
-
-export default { readFile, readFileLinesNumbers, test };
+export default { readFile, readFileLinesNumbers };
