@@ -8,4 +8,6 @@ const readFileLinesNumbers = (fileName, url) => {
     return lines.map(line => parseInt(line, 10));
 };
 
-export default { readFile, readFileLinesNumbers };
+const compareNumbers = (a, b) => a - b;
+
+export default { readFile, readFileLinesNumbers, compareNumbers };
