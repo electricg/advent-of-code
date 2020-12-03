@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { url } from 'inspector';
+import { sep } from 'path';
 
 const readFile = (fileName, url) => fs.readFileSync(new URL(fileName, url), 'utf-8');
 
@@ -13,13 +14,13 @@ const readFileLinesNumbers = (fileName, url) => {
     return lines.map(line => parseInt(line, 10));
 };
 
-const readFileString = (fileName, url) => {
+const readFileString = (fileName, url, separator = ',') => {
     const txt = readFile(fileName, url);
-    return txt.trim().split(',');
+    return txt.trim().split(separator);
 };
 
-const readFileStringNumbers = (fileName, url) => {
-    const items = readFileString(fileName, url);
+const readFileStringNumbers = (fileName, url, separator = ',') => {
+    const items = readFileString(fileName, url, separator);
     return items.map(item => parseInt(item, 10));
 };
 
