@@ -1,6 +1,4 @@
 import fs from 'fs';
-import { url } from 'inspector';
-import { sep } from 'path';
 
 const readFile = (fileName, url) => fs.readFileSync(new URL(fileName, url), 'utf-8');
 
