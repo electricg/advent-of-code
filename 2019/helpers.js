@@ -24,11 +24,14 @@ const readFileStringNumbers = (fileName, url, separator = ',') => {
 
 const compareNumbers = (a, b) => a - b;
 
+const readStringNumbers = (string, separator = ',') => string.split(separator).map(i => parseInt(i, 10));
+
 export default {
     readFile,
     readFileLines,
     readFileLinesNumbers,
     readFileString,
     readFileStringNumbers,
-    compareNumbers
+    compareNumbers,
+    readStringNumbers
 };
