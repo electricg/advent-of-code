@@ -14,9 +14,12 @@ const readFileLinesNumbers = (fileName, url) => {
 
 const compareNumbers = (a, b) => a - b;
 
+const deepCopy = value => JSON.parse(JSON.stringify(value));
+
 export default {
     readFile,
     readFileLines,
     readFileLinesNumbers,
-    compareNumbers
+    compareNumbers,
+    deepCopy
 };
