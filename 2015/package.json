@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "harp": "harp server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +26,7 @@
     "prettier-eslint": "^12.0.0"
   },
   "dependencies": {
+    "harp": "^0.33.0",
     "md5": "^2.3.0"
   }
 }
