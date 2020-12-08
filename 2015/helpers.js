@@ -49,6 +49,6 @@ export default {
     readFileString,
     readFileStringNumbers,
     compareNumbers,
-    readStringNumbers,
+    readStringNumbers
     // startHarp
 };

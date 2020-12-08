@@ -42,7 +42,8 @@
     "parserOptions": {
         "ecmaVersion": 8,
         "sourceType": "module"
-    }
+    },
+    "extends": ["standard"]
     // "extends": ["prettier"],
     // "plugins": ["prettier"]
 }
