@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+body {
+  margin: 0;
+}
+canvas {
+  border: 1px solid red;
+  margin: 10px;
+}
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script src="data.js"></script>
+    <script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+ctx.canvas.width = 1000;
+ctx.canvas.height = 1000;
+
+// ctx.fillStyle = 'green';
+// ctx.fillRect(100, 90, 150, 100);
+
+const createGrid = (w, h) => {
+    const row = Array(w).fill(0);
+    const grid = [];
+    for (let y = 0; y < h; y++) {
+        grid.push([...row]);
+    }
+    return grid;
+}
+
+const actions = {
+    'turn off': i => 0,
+    'turn on': i => 1,
+    'toggle': i => i === 0 ? 1 : 0
+};
+
+const drawPixel = (value, x, y) => {
+    ctx.fillStyle = value ? 'black' : 'white';
+    ctx.fillRect(x, y, 1, 1);
+};
+
+const updateGrid = (grid, { action, x1, y1, x2, y2 }) => {
+    const fx = actions[action];
+    for (let y = y1; y <= y2; y++) {
+        for (let x = x1; x <= x2; x++) {
+            grid[y][x] = fx(grid[y][x]);
+            drawPixel(grid[y][x], x, y);
+        }
+    }
+};
+
+const calcSolution = input => {
+    const grid = createGrid(1000, 1000);
+
+    const len = input.length;
+    let i = 0;
+    setTimeout(function run() {
+        // console.log(i);
+        updateGrid(grid, input[i]);
+        i++;
+        if (i < len) {
+            setTimeout(run, 100);
+        }
+        else {
+            console.log('the end');
+        }
+    }, 100);
+};
+
+calcSolution(data.input);
+    </script>
+</body>
+</html>
