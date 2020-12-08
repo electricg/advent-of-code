@@ -1,5 +1,5 @@
 import fs from 'fs';
-import harp from 'harp';
+// import harp from 'harp';
 
 const readFile = (fileName, url) => fs.readFileSync(new URL(fileName, url), 'utf-8');
 
@@ -29,17 +29,17 @@ const compareNumbers = (a, b) => a - b;
 
 const readStringNumbers = (string, separator = ',') => string.split(separator).map(i => parseInt(i, 10));
 
-const startHarp = ({ port = 9000, dir = './' }) => {
-    harp.server(dir, {
-        port
-    }, () => {
-        console.log(
-`------------
-Your server is listening at http://localhost:${port}/
-Press Ctl+C to stop the server
-------------`);
-    });
-};
+// const startHarp = ({ port = 9000, dir = './' }) => {
+//     harp.server(dir, {
+//         port
+//     }, () => {
+//         console.log(
+// `------------
+// Your server is listening at http://localhost:${port}/
+// Press Ctl+C to stop the server
+// ------------`);
+//     });
+// };
 
 export default {
     readFile,
@@ -50,5 +50,5 @@ export default {
     readFileStringNumbers,
     compareNumbers,
     readStringNumbers,
-    startHarp
+    // startHarp
 };
