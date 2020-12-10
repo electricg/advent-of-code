@@ -4,12 +4,13 @@ const fileName = './input.txt';
 
 const input = Helpers.readFile(fileName, import.meta.url);
 
-const parseInput = () => {
+const parseInput = input => {
 
 };
 
-const calcSolution = () => {
-
+const calcSolution = input => {
+    const parsedInput = parseInput(input);
+    console.log(parsedInput);
 };
 
 const tests = [
