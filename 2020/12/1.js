@@ -20,23 +20,20 @@ const parseInput = input => input.trim().split('\n').map(line => {
 
 const calcManhattanDistance = (p2, p1 = { x: 0, y: 0 }) => Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
 
+const SETTINGS = {
+    'E': { dir: 'x', mod:  1, angle:   0 },
+    'W': { dir: 'x', mod: -1, angle: 180 },
+    'S': { dir: 'y', mod: -1, angle:  90 },
+    'N': { dir: 'y', mod:  1, angle: 270 },
+    'L': -1,
+    'R':  1,
+    0: 'E',
+    90: 'S',
+    180: 'W',
+    270: 'N'
+};
+
 const doInstruction = (ship, { action, value }) => {
-    const facing = {
-        0: 'E',
-        90: 'S',
-        180: 'W',
-        270: 'N'
-    };
-    const forward = {
-        'E': { dir: 'x', mod: 1 },
-        'W': { dir: 'x', mod: -1 },
-        'S': { dir: 'y', mod: -1 },
-        'N': { dir: 'y', mod: 1 },
-    }
-    const rotationMod = {
-        'L': -1,
-        'R':  1
-    };
     let move;
 
     switch(action) {
@@ -44,23 +41,22 @@ const doInstruction = (ship, { action, value }) => {
         case 'S':
         case 'E':
         case 'W':
-            move = forward[action];
+            move = SETTINGS[action];
             ship[move.dir] += (move.mod * value);
             break;
         case 'L':
         case 'R':
-            let rotation = ship.rotation + (rotationMod[action] * value);
-            if (rotation >= 360) {
-                rotation = rotation % 360;
+            move = SETTINGS[ship.facing].angle + (SETTINGS[action] * value);
+            if (move >= 360) {
+                move = move % 360;
             }
-            if (rotation < 0) {
-                rotation = 360 + rotation;
+            if (move < 0) {
+                move = 360 + move;
             }
-            ship.rotation = rotation;
-            ship.facing = facing[rotation];
+            ship.facing = SETTINGS[move];
             break;
         case 'F':
-            move = forward[ship.facing];
+            move = SETTINGS[ship.facing];
             ship[move.dir] += (move.mod * value);
             break;
         default:
@@ -75,8 +71,7 @@ const calcSolution = input => {
     const ship = {
         x: 0,
         y: 0,
-        facing: 'E',
-        rotation: 0
+        facing: 'E'
     };
 
     parsedInput.forEach(instruction => doInstruction(ship, instruction));
