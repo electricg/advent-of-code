@@ -16,10 +16,16 @@ const compareNumbers = (a, b) => a - b;
 
 const deepCopy = value => JSON.parse(JSON.stringify(value));
 
+const dec2bin = dec => (dec >>> 0).toString(2);
+
+const bin2dec = bin => parseInt(bin, 2);
+
 export default {
     readFile,
     readFileLines,
     readFileLinesNumbers,
     compareNumbers,
-    deepCopy
+    deepCopy,
+    dec2bin,
+    bin2dec
 };
