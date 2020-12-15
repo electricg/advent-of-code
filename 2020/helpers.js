@@ -12,6 +12,8 @@ const readFileLinesNumbers = (fileName, url) => {
     return lines.map(line => parseInt(line, 10));
 };
 
+const readStringNumbers = (string, separator = ',') => string.split(separator).map(i => parseInt(i, 10));
+
 const compareNumbers = (a, b) => a - b;
 
 const deepCopy = value => JSON.parse(JSON.stringify(value));
@@ -24,6 +26,7 @@ export default {
     readFile,
     readFileLines,
     readFileLinesNumbers,
+    readStringNumbers,
     compareNumbers,
     deepCopy,
     dec2bin,
