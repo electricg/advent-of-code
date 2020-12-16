@@ -12,22 +12,20 @@ const calcSolution = (input, lastTurn) => {
     
     const len = parsedInput.length + 1;
     let lastSpoken = parsedInput.pop();
-    let spokenNumbers = parsedInput.reduce((acc, item, index) => {
-        acc[item] = index + 1;
-        return acc;
-    }, {});
-    // console.log(len, spokenNumbers, lastSpoken);
+    const spokenNumbers = new Map();
+    parsedInput.forEach((item, index) => {
+        spokenNumbers.set(item, index + 1);
+    });
 
     for (let i = len; i <= lastTurn; i++) {
-        const firstTime = spokenNumbers[lastSpoken];
-        spokenNumbers[lastSpoken] = i - 1;
+        const firstTime = spokenNumbers.get(lastSpoken);
+        spokenNumbers.set(lastSpoken, i - 1);
         if (firstTime === undefined) {
             lastSpoken = 0;
         }
         else {
             lastSpoken = i - 1 - firstTime;
         }
-        // console.log(i, spokenNumbers, lastSpoken);
     }
 
     return lastSpoken;
