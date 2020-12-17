@@ -27,6 +27,8 @@ const readFileStringNumbers = (fileName, url, separator = ',') => {
 
 const compareNumbers = (a, b) => a - b;
 
+const compareNumbersDesc = (a, b) => b - a;
+
 const readStringNumbers = (string, separator = ',') => string.split(separator).map(i => parseInt(i, 10));
 
 // const startHarp = ({ port = 9000, dir = './' }) => {
@@ -66,6 +68,8 @@ const permute = permutation => {
     return result;
 }
 
+const deepCopy = value => JSON.parse(JSON.stringify(value));
+
 export default {
     readFile,
     writeFile,
@@ -74,7 +78,9 @@ export default {
     readFileString,
     readFileStringNumbers,
     compareNumbers,
+    compareNumbersDesc,
     readStringNumbers,
-    permute
+    permute,
+    deepCopy
     // startHarp
 };
