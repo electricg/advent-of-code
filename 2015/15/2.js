@@ -50,14 +50,14 @@ const calcCaloriesFromRecipe = (data, recipe) => {
     }, 0);
 };
 
-const calcFromRecipe = (data, recipe) => {
-    const score = calcScoreFromRecipe(data, recipe);
-    const calories = calcCaloriesFromRecipe(data, recipe);
-    return {
-        score,
-        calories
-    };
-}
+// const calcFromRecipe = (data, recipe) => {
+//     const score = calcScoreFromRecipe(data, recipe);
+//     const calories = calcCaloriesFromRecipe(data, recipe);
+//     return {
+//         score,
+//         calories
+//     };
+// }
 
 // const _data = {
 //     'butterscotch': { 'capacity': -1, 'durability': -2, 'flavor': 6, 'texture': 3, 'calories': 8 },
@@ -72,19 +72,21 @@ const getMaxDistance = (data, remainingItems, qtMax = 10, recipe = {}, best = { 
     const remainingItemsLen = remainingItems.length;
     const qtMin = remainingItemsLen === 0 ? qtMax : 0;
     let current;
+    let calories;
 
     for (let i = qtMin; i <= qtMax; i++) {
         recipe[currentItem] = i;
 
         if (remainingItemsLen) {
-            current = getMaxDistance(data, [...remainingItems], qtMax - i, recipe, best);
+            getMaxDistance(data, [...remainingItems], qtMax - i, recipe, best);
         }
         else {
-            current = calcFromRecipe(data, recipe);
+            current = calcScoreFromRecipe(data, recipe);
+            calories = calcCaloriesFromRecipe(data, recipe);
         }
 
-        if (current.score > best.score && current.calories === 500) {
-            best.score = current.score;
+        if (current > best.score && calories === 500) {
+            best.score = current;
         }
     }
 
