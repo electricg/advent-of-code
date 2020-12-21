@@ -6,36 +6,26 @@ const input = Helpers.readFile(fileName, import.meta.url);
 
 const parseInput = input => input.trim().split('\n');
 
-const run = line => {
-
+const parseExpression = expression => {
+    return expression.replace(/\(/g, '( ').replace(/\)/g, ' )').split(' ');
 };
 
-const calcExpression = expression => {
+const calcExpression = (expression = []) => {
     let a = '';
     while (expression.length) {
-        let spaceIndex = expression.indexOf(' ');
-        if (spaceIndex === -1) {
-            spaceIndex = expression.length;
-        }
-        const current = expression.slice(0, spaceIndex);
-        const first = current[0];
-        const last = current[current.length - 1];
-        expression = expression.slice(spaceIndex + 1);
-        // console.log(current, `_${expression}_`, a);
+        const current = expression.shift();
 
-        if (first === '(') {
-            const tmp = calcExpression(`${current.slice(1)} ${expression}`);
+        if (current === '(') {
+            const tmp = calcExpression(expression);
             expression = tmp.string;
             a = `${a} ${tmp.res}`;
             a = eval(a);
         }
-        else if (last === ')') {
-            const firstP = current.indexOf(')');
-            a = `${a} ${current.slice(0, firstP)}`
+        else if (current === ')') {
             a = eval(a);
-            return { res: a, string: `${current.slice(firstP + 1)} ${expression}`};
+            return { res: a, string: expression };
         }
-        else if (first === '*' || first === '+') {
+        else if (current === '*' || current === '+') {
             a = `${a} ${current}`;
         }
         else {
@@ -50,7 +40,8 @@ const calcSolution = input => {
     const parsedInput = parseInput(input);
     // console.log(parsedInput);
     const res = parsedInput.reduce((acc, line) => {
-        return acc += calcExpression(line).res;
+        const exp = parseExpression(line);
+        return acc += calcExpression(exp).res;
     }, 0);
     // console.log(res);
     return res;
@@ -84,7 +75,7 @@ const tests = [
 ];
 
 tests.forEach(({ inp, out }) => {
-    const res = calcExpression(inp);
+    const res = calcExpression(parseExpression(inp));
     if (res.res === out) {
         console.log(`✅`);
     }
