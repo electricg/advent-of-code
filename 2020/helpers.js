@@ -22,6 +22,11 @@ const dec2bin = dec => (dec >>> 0).toString(2);
 
 const bin2dec = bin => parseInt(bin, 2);
 
+const removeItemFromArray = (arr, item) => {
+    const index = arr.indexOf(item);
+    return [...arr.slice(0, index), ...arr.slice(index + 1)];
+};
+
 export default {
     readFile,
     readFileLines,
@@ -30,5 +35,6 @@ export default {
     compareNumbers,
     deepCopy,
     dec2bin,
-    bin2dec
+    bin2dec,
+    removeItemFromArray,
 };

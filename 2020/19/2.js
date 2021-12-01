@@ -21,8 +21,18 @@ const parseInput = input => {
 };
 
 const createRegExp = (string, data) => {
+    const counters = {};
     while(/\d/.test(string)) {
-        string = string.replace(/\d+/g, match => `(${data[match]})`);
+        string = string.replace(/\d+/g, match => {
+            if (counters[match] == null) {
+                counters[match] = 0;
+            }
+            counters[match]++;
+            if (counters[match] > 5) {
+                return '';
+            }
+            return `(${data[match]})`;
+        });
     }
     return new RegExp(`^${string.replace(/ /g, '')}$`);
 };
@@ -31,8 +41,14 @@ const calcSolution = input => {
     const parsedInput = parseInput(input);
     // console.log(parsedInput);
     const { rules, messages } = parsedInput;
+    // rules[8] = '42 | 42 8';
+    rules[8] = '42+';
+    // rules[11] = '42 31 | 42 11 31';
+    // rules[11] = '42+ 31+';
     const x = createRegExp(rules[0], rules);
     return messages.filter(m => x.test(m)).length;
+    // const y = createRegExp(rules[42], rules);
+    // console.log(y);
 };
 
 const tests = [

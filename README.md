@@ -23,3 +23,7 @@ Each part has its own file, independent from each other.
     ```
 
 - RegExp `\1` to capture a group and use it, for example, to check for a repeated character `/([a-z])\1{1,}/`
+
+- `for..in` iterates keys
+
+- `for..of` iterates values
