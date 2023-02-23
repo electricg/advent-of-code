@@ -7,11 +7,8 @@ const input = Helpers.readFile(fileName, import.meta.url);
 const parseInput = input => {
     const [formulas, molecule] = input.trim().split('\n\n');
     const parsedFormulas = formulas.trim().split('\n').reduce((acc, line) => {
-        const [from, to] = line.split(/\s*=>\s*/);
-        if (!acc[from]) {
-            acc[from] = [];
-        }
-        acc[from].push(to);
+        const [to, from] = line.split(/\s*=>\s*/);
+        acc[from] = to;
         return acc;
     }, {});
     return {
@@ -24,23 +21,30 @@ const replaceAtIndex = (string, find, replace, index) => {
     return `${string.slice(0, index)}${replace}${string.slice(index + find.length)}`;
 };
 
-const getMinSteps = (data, start, end) => {
-    let minSteps = 0;
-    const formulasKeys = Object.keys(formulas);
-    const formulasKeysLen = formulasKeys.length;
-
-    for (let i = 0; i < formulasKeysLen; i++) {
-        
-    }
-
-    return minSteps;
-};
+const sortByLength = (a, b) => b.length - a.length; 
 
 const calcSolution = (input, start) => {
     const parsedInput = parseInput(input);
-    console.log(parsedInput);
+    // console.log(parsedInput);
     const { formulas, molecule } = parsedInput;
-    const minD = getMinSteps(formulas, start, molecule);
+    const sortedKeys = Object.keys(formulas).sort(sortByLength);
+
+    let target = molecule;
+    let res = 0;
+
+    while (target !== start) {
+        for (const key of sortedKeys) {
+            if (target.includes(key)) {
+                target = target.replaceAll(key, (match, offset, str) => {
+                    res++;
+                    return formulas[match];
+                })
+                // console.log(target);
+                break;
+            }
+        }
+    }
+    return res;
 };
 
 const tests = [
@@ -82,4 +86,4 @@ tests.forEach(({ inp, out, start }) => {
     }
 });
 
-// console.log(calcSolution(input, 'e'));
+console.log(calcSolution(input, 'e'));
