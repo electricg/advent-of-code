@@ -19,5 +19,8 @@
   "homepage": "https://github.com/electricg/advent-of-code#readme",
   "devDependencies": {
     "eslint": "^8.39.0"
+  },
+  "dependencies": {
+    "md5": "^2.3.0"
   }
 }
