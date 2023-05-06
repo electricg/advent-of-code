@@ -4,9 +4,7 @@ const fileName = './input.txt';
 
 const input = Helpers.readFile(fileName, import.meta.url);
 
-const parseInput = (input) => {
-  return input;
-};
+const parseInput = (input) => input.trim();
 
 const calcSolution = (input) => {
   const parsedInput = parseInput(input);
