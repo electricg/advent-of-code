@@ -5,7 +5,10 @@ const readFile = (fileName, url) =>
 
 const arrayOfObj = (n) => new Array(n).fill().map(Object);
 
+const compareNumbers = (a, b) => a - b;
+
 export default {
   readFile,
   arrayOfObj,
+  compareNumbers,
 };
