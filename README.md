@@ -30,3 +30,11 @@ Each part has its own file, independent from each other.
 - `for..of` iterates values
 
 - `x ** y` is `Math.pow(x, y)`
+
+- Least Common Multiple of an array values using Euclidean Algorithm, from https://stackoverflow.com/a/49722579/471720
+  ```js
+  const gcd = (a, b) => (a ? gcd(b % a, a) : b);
+  const lcm = (a, b) => (a * b) / gcd(a, b);
+  const lcmOfArray = arr => arr.reduce(lcm);
+  lcmOfArray([2, 3]); // 6
+  ```
