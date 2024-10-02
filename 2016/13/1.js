@@ -4,103 +4,104 @@ const fileName = './input.txt';
 
 const input = Helpers.readFile(fileName, import.meta.url);
 
-const parseInput = (input) => parseInt(input.trim());
+const parseInput = (input) => input.trim() * 1;
 
-/**
- * Check if a coordinate is a wall
- * @param {number} x x coordinate
- * @param {number} y y coordinate
- * @param {number} favorite office designer's favorite number (your puzzle input)
- * @returns {boolean} true if it's a wall
- */
-const isWall = (x, y, favorite) => {
-  const sum = x * x + 3 * x + 2 * x * y + y + y * y + favorite;
-  const binary = sum.toString(2);
-  return binary.split('').filter((i) => i === '1').length % 2 === 1;
+const calcTile = (x, y, favorite) => {
+  const n = x * x + 3 * x + 2 * x * y + y + y * y + favorite;
+  const bin = n.toString(2);
+  const ones = bin.split('').filter((b) => b === '1').length;
+  if (ones % 2 === 0) {
+    return '.';
+  }
+  return '#';
 };
 
-/**
- *
- * @param {number[]} param width & height of the maze
- * @param {number} favorite office designer's favorite number (your puzzle input)
- * @returns
- */
-const buildMaze = ([width, height], favorite) => {
-  const maze = [];
+const isTileEmpty = (x, y, favorite, map) => {
+  // outside the building
+  if (x < 0 || y < 0) {
+    return false;
+  }
 
-  for (let y = 0; y < height; y++) {
-    const line = [];
-    for (let x = 0; x < width; x++) {
-      const c = isWall(x, y, favorite);
-      const item = c ? 0 : 1; // 0 is wall, 1 is open space
-      line.push(item);
+  // tile has not been checked yet
+  if (!map[x]?.[y]) {
+    if (!map[x]) {
+      map[x] = [];
     }
-    maze.push(line);
+    // memorize tile in map
+    map[x][y] = calcTile(x, y, favorite);
   }
 
-  return maze;
+  return map[x][y] === '.';
 };
 
-// 0 = '#' wall | 1 = '.' open space | 2 = 'O' route
-const printMaze = (maze) => {
-  let output = '  ';
-  const w = maze[0].length;
-  const obj = ['#', '.', 'O'];
-
-  for (let x = 0; x < w; x++) {
-    output += x;
-  }
-  for (let y = 0; y < maze.length; y++) {
-    output += `\n${y} `;
-    for (let x = 0; x < w; x++) {
-      output += obj[maze[y][x]];
-    }
-  }
-
-  return output;
-};
-
-const calcSolution = (input, size, end) => {
-  const favorite = parseInput(input);
-  const maze = buildMaze(size, favorite);
-  console.log(printMaze(maze));
-  const start = [1, 1];
-
-  return favorite;
-};
-
-const testsMaze = [
-  {
-    inp: [[10, 7], 10],
-    out: `  0123456789
-0 .#.####.##
-1 ..#..#...#
-2 #....##...
-3 ###.#.###.
-4 .##..#..#.
-5 ..##....#.
-6 #...##.###`,
-  },
+const DIRS = [
+  [0, -1],
+  [1, 0],
+  [0, 1],
+  [-1, 0],
 ];
 
-testsMaze.forEach(({ inp, out }) => {
-  const res = printMaze(buildMaze(...inp));
-  if (res === out) {
-    console.log(`✅`);
-  } else {
-    console.error(`❌`);
+const calcSolution = (input, end) => {
+  const parsedInput = parseInput(input);
+  // console.log(parsedInput);
+
+  const favorite = parsedInput;
+  const start = [1, 1];
+
+  const seen = {};
+  const queue = [];
+
+  let map = [];
+
+  queue.push({ pos: start, steps: 0 });
+  seen[`${start[0]}_${start[1]}`] = 1;
+
+  while (queue.length) {
+    const {
+      pos: [x, y],
+      steps,
+    } = queue.shift();
+
+    for (const [dx, dy] of DIRS) {
+      const nx = x + dx;
+      const ny = y + dy;
+
+      // already traversed it
+      if (seen[`${nx}_${ny}`]) {
+        continue;
+      }
+
+      // arrived at the end
+      if (nx === end[0] && ny === end[1]) {
+        return steps + 1;
+      }
+
+      // if empty space
+      if (isTileEmpty(nx, ny, favorite, map)) {
+        queue.push({ pos: [nx, ny], steps: steps + 1 });
+        seen[`${nx}_${ny}`] = 1;
+      }
+    }
   }
-});
+
+  return 0;
+};
 
 const tests = [
   {
-    inp: ['10', [10, 7], [7, 4]],
+    inp: {
+      favorite: `
+10
+`,
+      end: [7, 4],
+    },
     out: 11,
   },
 ];
 
 tests.forEach(({ inp, out }) => {
-  const res = calcSolution(...inp);
+  const { favorite, end } = inp;
+  const res = calcSolution(favorite, end);
   if (res === out) {
     console.log(`✅`);
   } else {
@@ -108,4 +109,4 @@ tests.forEach(({ inp, out }) => {
   }
 });
 
-// console.log(calcSolution(input, [55, 55], [31, 39]));
+console.log(calcSolution(input, [31, 39]));
