@@ -42,6 +42,10 @@ Each part has its own file, independent from each other.
 
 - `array.at(-1)` to get the last element of an array without removing it
 
+- replace all `str.replace(/old/g, 'new')`
+
 ## Where to look for
 
 - Breadth-First Search: [2022/12/1.js](2022/12/1.js) [2016/13/1.js](2016/13/1.js)
+
+- To studdy: [2016/16/2b.js](2016/16/2b.js)
