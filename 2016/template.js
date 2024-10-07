@@ -9,7 +9,8 @@ const parseInput = (input) => input.trim();
 const calcSolution = (input) => {
   const parsedInput = parseInput(input);
   console.log(parsedInput);
-  return parsedInput;
+
+  return 0;
 };
 
 const tests = [
