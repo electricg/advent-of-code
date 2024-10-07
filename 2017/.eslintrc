@@ -1,0 +1,52 @@
+{
+    "root": true,
+    "env": {
+        "browser": false,
+        "es6": true,
+        "node": true,
+        "mocha": true
+    },
+    "globals": {
+        "should": true
+    },
+    "rules": {
+        "curly": "error",
+        "comma-dangle": ["error", "never"],
+        "comma-spacing": "error",
+        "dot-location": ["error", "property"],
+        "eol-last": "error",
+        "eqeqeq": ["error", "allow-null"],
+        "key-spacing": ["error", { "beforeColon": false }],
+        "no-cond-assign": ["error", "always"],
+        "no-dupe-keys": "error",
+        "no-redeclare": "error",
+        "no-trailing-spaces": "error",
+        "no-undef": "error",
+        "no-unused-expressions": "error",
+        "no-unused-vars": "warn",
+        "object-curly-spacing": ["error", "always"],
+        "prefer-template": "warn",
+        "semi": ["error", "always"],
+        "space-before-blocks": ["error", "always"],
+        "space-before-function-paren": ["error", {
+            "anonymous": "never",
+            "named": "never",
+            "asyncArrow": "always"
+        }],
+        "prettier/prettier": ["error", {
+            "printWidth": 80,
+            "singleQuote": true,
+            "trailingComma": "none",
+            "bracketSpacing": true,
+            "jsxBracketSameLine": false,
+            "tabWidth": 4
+        }]
+    },
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "prettier"
+    ]
+}
