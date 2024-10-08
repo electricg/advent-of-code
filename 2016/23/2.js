@@ -11,7 +11,27 @@ const parseInput = (input) =>
     .map((line) => line.split(' '));
 
 const calcSolution = (input, start) => {
-  const parsedInput = parseInput(input);
+  // https://www.reddit.com/r/adventofcode/comments/5jvbzt/comment/dbjbocc/
+  const find = `
+cpy b c
+inc a
+dec c
+jnz c -2
+dec d
+jnz d -5
+`;
+  const replace = `
+mul b d a
+nop
+nop
+nop
+nop
+nop
+`;
+  const newInput = input.trim().replace(find.trim(), replace.trim());
+  // console.log(newInput);
+
+  const parsedInput = parseInput(newInput);
   // console.log(parsedInput);
   const len = parsedInput.length;
   let current = 0;
@@ -26,7 +46,7 @@ const calcSolution = (input, start) => {
   // console.log(registers);
 
   while (current < len) {
-    const [what, x, y] = parsedInput[current];
+    const [what, x, y, z] = parsedInput[current];
     current++;
     // console.log(what, x, y);
 
@@ -57,6 +77,10 @@ const calcSolution = (input, start) => {
       if (registers[x] !== 0) {
         current += yN - 1;
       }
+    } else if (what === 'mul') {
+      const xN = isNaN(x) ? registers[x] : Number(x);
+      const yN = isNaN(y) ? registers[y] : Number(y);
+      registers[z] = xN * yN;
     } else if (what === 'tgl') {
       const instruction = parsedInput[registers[x] + current - 1];
 
@@ -64,8 +88,6 @@ const calcSolution = (input, start) => {
       if (!instruction) {
         continue;
       }
-
-      // console.log(instruction);
 
       let newWhat = '';
 
@@ -83,9 +105,6 @@ const calcSolution = (input, start) => {
         newWhat = 'jnz';
       }
       instruction[0] = newWhat;
-      instruction.push(true); // marked as toggled
-      // console.log(parsedInput);
-      // return;
     }
   }
 
@@ -117,4 +136,4 @@ tests.forEach(({ inp, start, out }) => {
   }
 });
 
-console.log(calcSolution(input, { a: 7 }));
+console.log(calcSolution(input, { a: 12 }));
