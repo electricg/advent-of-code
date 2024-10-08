@@ -4,23 +4,47 @@ const fileName = './input.txt';
 
 const input = Helpers.readFile(fileName, import.meta.url);
 
-const parseInput = (input) => input.trim();
+const parseInput = (input) =>
+  input
+    .trim()
+    .split('\n')
+    .map((line) => Number(line.trim()));
 
 const calcSolution = (input) => {
   const parsedInput = parseInput(input);
-  console.log(parsedInput);
-  return parsedInput;
+  // console.log(parsedInput);
+
+  let frequency = 0;
+
+  parsedInput.forEach((n) => {
+    frequency += n;
+  });
+
+  return frequency;
 };
 
 const tests = [
   {
-    inp: '',
-    out: '',
+    inp: '+1, -2, +3, +1',
+    out: 3,
+  },
+  {
+    inp: '+1, +1, +1',
+    out: 3,
+  },
+  {
+    inp: '+1, +1, -2',
+    out: 0,
+  },
+  {
+    inp: '-1, -2, -3',
+    out: -6,
   },
 ];
 
 tests.forEach(({ inp, out }) => {
-  const res = calcSolution(inp);
+  const inp2 = inp.replace(/, /g, '\n');
+  const res = calcSolution(inp2);
   if (res === out) {
     console.log(`✅`);
   } else {
@@ -28,4 +52,4 @@ tests.forEach(({ inp, out }) => {
   }
 });
 
-// console.log(calcSolution(input));
+console.log(calcSolution(input));
