@@ -1,0 +1,25 @@
+{
+  "name": "advent-of-code-2024",
+  "version": "1.0.0",
+  "description": "Advent of Code 2024",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electricg/advent-of-code.git"
+  },
+  "author": "Giulia Alfonsi electric_g",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/electricg/advent-of-code/issues"
+  },
+  "homepage": "https://github.com/electricg/advent-of-code#readme",
+  "devDependencies": {
+    "eslint": "^8.28.0"
+  },
+  "dependencies": {
+  }
+}
