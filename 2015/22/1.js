@@ -9,74 +9,243 @@ const parseInput = (input) => {
     .trim()
     .split('\n')
     .reduce((acc, line) => {
-      if (line) {
-        const [key, val] = line.split(': ');
-        acc[key.trim()] = val.trim() * 1;
-      }
+      const [key, val] = line.split(': ');
+      acc[key.trim().toLowerCase().replace(' ', '_')] = Number(val.trim());
       return acc;
     }, {});
 };
 
-const calcSolution = (input) => {
-  const parsedInput = parseInput(input);
-  // console.log(parsedInput);
-  const boss = {
-    points: parsedInput['Hit Points'],
-    damage: parsedInput['Damage'],
-  };
-  const me = {
-    points: 50,
-    mana: 500,
-  };
-  console.log(boss, me);
+const spellBasic = {
+  damage: 0,
+  armor: 0,
+  heal: 0,
+  mana: 0,
+  duration: 0,
 };
 
-const spells = [
-  {
+const SPELLS = {
+  'Magic Missile': {
     name: 'Magic Missile',
+    ...spellBasic,
     cost: 53,
     damage: 4,
-    armor: 0,
-    heal: 0,
-    mana: 0,
-    duration: 1,
   },
-  {
+  Drain: {
     name: 'Drain',
+    ...spellBasic,
     cost: 73,
     damage: 2,
-    armor: 0,
     heal: 2,
-    mana: 0,
-    duration: 1,
   },
-  {
+  Shield: {
     name: 'Shield',
+    ...spellBasic,
     cost: 113,
-    damage: 0,
     armor: 7,
-    heal: 0,
-    mana: 0,
     duration: 6,
   },
-  {
+  Poison: {
     name: 'Poison',
+    ...spellBasic,
     cost: 173,
     damage: 3,
-    armor: 0,
-    heal: 0,
-    mana: 0,
     duration: 6,
   },
-  {
+  Recharge: {
     name: 'Recharge',
+    ...spellBasic,
     cost: 229,
-    damage: 0,
-    armor: 0,
-    heal: 0,
     mana: 101,
     duration: 5,
   },
+};
+
+const playPlayerTurn = (step, spell) => {
+  // console.log('-- Player turn --');
+
+  const res = JSON.parse(JSON.stringify(step));
+
+  // active spells
+  for (const key in step.activeSpells) {
+    if (step.activeSpells[key] === 1) {
+      delete res.activeSpells[key];
+    } else if (step.activeSpells[key] > 1) {
+      res.activeSpells[key] = step.activeSpells[key] - 1;
+    }
+    const s = SPELLS[key];
+    res.boss.hit_points -= s.damage;
+    res.player.mana += s.mana;
+
+    // boss is dead
+    // if (res.boss.hit_points <= 0) {
+    //   return res;
+    // }
+  }
+
+  // cast spell
+  res.manaSpent += spell.cost;
+  res.player.mana -= spell.cost;
+  if (spell.duration > 0) {
+    // it's an active spell
+    res.activeSpells[spell.name] = spell.duration;
+  } else {
+    // it's an immediate spell
+    res.boss.hit_points -= spell.damage;
+    res.player.hit_points += spell.heal;
+  }
+
+  return res;
+};
+
+const playBossTurn = (step) => {
+  // console.log('-- Boss turn --');
+
+  const res = JSON.parse(JSON.stringify(step));
+
+  let playerTmpArmor = 0;
+
+  // active spells
+  for (const key in step.activeSpells) {
+    if (step.activeSpells[key] === 1) {
+      delete res.activeSpells[key];
+    } else if (step.activeSpells[key] > 1) {
+      res.activeSpells[key] = step.activeSpells[key] - 1;
+    }
+    const s = SPELLS[key];
+    res.boss.hit_points -= s.damage;
+    res.player.mana += s.mana;
+    playerTmpArmor += s.armor;
+
+    // boss is dead
+    if (res.boss.hit_points <= 0) {
+      return res;
+    }
+  }
+
+  // boss attacks
+  res.player.hit_points -= Math.max(
+    1,
+    res.boss.damage - res.player.armor - playerTmpArmor
+  );
+
+  return res;
+};
+
+const calcSolution = (input, playerStart) => {
+  const parsedInput = parseInput(input);
+  // console.log(parsedInput);
+
+  const boss = { ...parsedInput };
+  // console.log(boss, playerStart);
+
+  // console.log(spells);
+
+  const queue = [];
+
+  queue.push({
+    player: { ...playerStart },
+    boss: { ...boss },
+    activeSpells: {},
+    manaSpent: 0,
+  });
+
+  // console.log(queue);
+
+  while (queue.length) {
+    const step = queue.shift();
+    // console.log('start', step);
+
+    // pick next spell
+    for (const s in SPELLS) {
+      const spell = SPELLS[s];
+      // console.log('spell', spell);
+
+      // You cannot cast a spell that would start an effect which is already active. However, effects can be started on the same turn they end.
+      if (step.activeSpells[spell.name] && step.activeSpells[spell.name] > 1) {
+        continue;
+      }
+
+      // You must have enough mana to cast a spell
+      if (spell.cost > step.player.mana) {
+        continue;
+      }
+
+      // player turn
+      const res1 = playPlayerTurn(step, spell);
+      // console.log('res1', res1);
+
+      // boss is dead
+      if (res1.boss.hit_points <= 0) {
+        return res1.manaSpent;
+      }
+
+      // boss turn
+      const res2 = playBossTurn(res1);
+      // console.log('res2', res2);
+
+      // boss is dead
+      if (res2.boss.hit_points <= 0) {
+        return res2.manaSpent;
+      }
+
+      // player is dead
+      if (res2.player.hit_points <= 0) {
+        continue;
+      }
+
+      // take another turn
+      queue.push({
+        player: { ...res2.player },
+        boss: { ...res2.boss },
+        activeSpells: { ...res2.activeSpells },
+        manaSpent: res2.manaSpent,
+      });
+    }
+  }
+
+  return 'error';
+};
+
+const tests = [
+  {
+    inp: `
+Hit Points: 13
+Damage: 8
+`,
+    player: {
+      hit_points: 10,
+      mana: 250,
+      armor: 0,
+    },
+    out: 226,
+  },
+  {
+    inp: `
+Hit Points: 14
+Damage: 8
+`,
+    player: {
+      hit_points: 10,
+      mana: 250,
+      armor: 0,
+    },
+    out: 641,
+  },
 ];
 
-console.log(calcSolution(input));
+tests.forEach(({ inp, player, out }) => {
+  const res = calcSolution(inp, player);
+  if (res === out) {
+    console.log(`✅`);
+  } else {
+    console.error(`❌`);
+  }
+});
+
+console.log(
+  calcSolution(input, {
+    hit_points: 50,
+    mana: 500,
+    armor: 0,
+  })
+);

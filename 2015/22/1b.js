@@ -26,9 +26,9 @@ class Player {
         },
         {
           cost: 113,
-          start: (m, o) => (m.armor += 7),
-          effect: (m, o) => {},
-          end: (m, o) => (m.armor -= 7),
+          start: (m) => (m.armor += 7),
+          effect: () => {},
+          end: (m) => (m.armor -= 7),
           duration: 6,
         },
         {
@@ -38,7 +38,7 @@ class Player {
         },
         {
           cost: 229,
-          effect: (m, o) => (m.mana += 101),
+          effect: (m) => (m.mana += 101),
           duration: 5,
         },
       ];
@@ -85,10 +85,10 @@ class Player {
     newPlayer.spent = this.spent;
     newPlayer.armor = this.armor;
     newPlayer.turn = this.turn;
-    for (var i = 0; i < this.activeSpells.length; i++) {
+    for (let i = 0; i < this.activeSpells.length; i++) {
       newPlayer.activeSpells.push(Object.assign({}, this.activeSpells[i]));
     }
-    for (var i = 0; i < this.history.length; i++) {
+    for (let i = 0; i < this.history.length; i++) {
       newPlayer.history.push(this.history[i]);
     }
 
