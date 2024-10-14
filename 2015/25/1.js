@@ -13,17 +13,17 @@ const parseInput = (input) => {
   };
 };
 
-const calcSolution = (input) => {
+const calcSolution = (input, fx, start) => {
   const parsedInput = parseInput(input);
   // console.log(parsedInput);
 
   const { row, column } = parsedInput;
 
-  let code = 20151125;
+  let code = start;
   let x = 1;
   let y = 1;
   while (x !== row || y !== column) {
-    code = (code * 252533) % 33554393;
+    code = fx(code);
 
     if (x === 1) {
       x = y + 1;
@@ -37,4 +37,30 @@ const calcSolution = (input) => {
   return code;
 };
 
-console.log(calcSolution(input));
+const tests = [
+  {
+    inp: 'row 4, column 2',
+    fx: (code) => (code += 1),
+    start: 1,
+    out: 12,
+  },
+  {
+    inp: 'row 1, column 5',
+    fx: (code) => (code += 1),
+    start: 1,
+    out: 15,
+  },
+];
+
+tests.forEach(({ inp, fx, start, out }) => {
+  const res = calcSolution(inp, fx, start);
+  if (res === out) {
+    console.log(`✅`);
+  } else {
+    console.error(`❌`);
+  }
+});
+
+console.log(
+  calcSolution(input, (code) => (code * 252533) % 33554393, 20151125)
+);
