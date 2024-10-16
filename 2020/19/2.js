@@ -4,7 +4,7 @@ const fileName = './input.txt';
 
 const input = Helpers.readFile(fileName, import.meta.url);
 
-const parseInput = input => {
+const parseInput = (input) => {
     const [rules, messages] = input.trim().split('\n\n');
     const parsedRules = rules.split('\n').reduce((acc, line) => {
         let [key, rule] = line.split(/\s*:\s*/);
@@ -16,39 +16,28 @@ const parseInput = input => {
     }, {});
     return {
         rules: parsedRules,
-        messages: messages.split('\n')
+        messages: messages.split('\n'),
     };
 };
 
 const createRegExp = (string, data) => {
-    const counters = {};
-    while(/\d/.test(string)) {
-        string = string.replace(/\d+/g, match => {
-            if (counters[match] == null) {
-                counters[match] = 0;
-            }
-            counters[match]++;
-            if (counters[match] > 5) {
-                return '';
-            }
-            return `(${data[match]})`;
-        });
+    while (/\d/.test(string)) {
+        string = string.replace(/\d+/g, (match) => `(${data[match]})`);
     }
     return new RegExp(`^${string.replace(/ /g, '')}$`);
 };
 
-const calcSolution = input => {
+const calcSolution = (input) => {
     const parsedInput = parseInput(input);
     // console.log(parsedInput);
     const { rules, messages } = parsedInput;
-    // rules[8] = '42 | 42 8';
+    // rules['8'] = '42 | 42 8';
     rules[8] = '42+';
-    // rules[11] = '42 31 | 42 11 31';
-    // rules[11] = '42+ 31+';
+    // rules['11'] = '42 31 | 42 11 31';
+    rules[11] =
+        '42 31 | 42 42 31 31 | 42 42 42 31 31 31 | 42 42 42 42 31 31 31 31';
     const x = createRegExp(rules[0], rules);
-    return messages.filter(m => x.test(m)).length;
-    // const y = createRegExp(rules[42], rules);
-    // console.log(y);
+    return messages.filter((m) => x.test(m)).length;
 };
 
 const tests = [
@@ -67,16 +56,15 @@ abbbab
 aaabbb
 aaaabbb
 `,
-        out: 2
-    }
+        out: 2,
+    },
 ];
 
 tests.forEach(({ inp, out }) => {
     const res = calcSolution(inp);
     if (res === out) {
         console.log(`✅`);
-    }
-    else {
+    } else {
         console.error(`❌`);
     }
 });
