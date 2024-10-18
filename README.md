@@ -48,4 +48,6 @@ Each part has its own file, independent from each other.
 
 - Breadth-First Search: [2022/12/1.js](2022/12/1.js) [2016/13/1.js](2016/13/1.js)
 
+- Karger: [2023/25/1.js](2023/25/1.js)
+
 - To study: [2016/16/2b.js](2016/16/2b.js)
